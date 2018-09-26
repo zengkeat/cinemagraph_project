@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+{% load bootstrap3%}
+{% block content %}
+
+<div class="jumbotron">
+
+  {# message framework  #}
+  {% if messages %}
+      <div class="col-lg-3 color03">
+          <ul class="messages">
+              {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+      </div>
+  {% endif %}
+
+
+    <div style="">
+      <p>By : {{object.user.get_full_name}} </p>
+      <p>Read Time : {% if object.read_time <= 1 %} < 1 minutes {%else%} {{object.read_time}} minutes{%endif%}</p>
+      <h1>{{object.title}} <span style=" font-size: 20px;color:grey;">{{object.timestamp}}</span> </h1>
+      <h2>{{object.description}}</h2>
+        <div id='editor'>  {# ckeditor ballon fucntion #}
+          <p>{{object.content|safe }}</p>
+        </div>
+    </div>
+
+
+
+</div>
+{% endblock %}

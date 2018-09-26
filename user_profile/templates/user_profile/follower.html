@@ -1,0 +1,44 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<div class="jumbotron">
+
+  {% if all_follower %}
+    <div class=" col-sm-4 mx-auto">
+    <h1>Follow by:</h1>
+
+    <ul>
+      {% for follower in all_follower %}
+        <li><p>{{follower}}</p></li>
+        {# <form class="" action="{% url 'user_profile:follower' %}" method="post">{% csrf_token %} #}
+          {# <input type="hidden" name="username" value="{{follower}}" > #}
+          {# <button class=" btn {% if is_following %}btn-primary{% else %}btn-success{% endif %}"> #}
+              {# {% if is_following %} #}
+                {# Unfollow #}
+                {# {% else %} #}
+                {# Follow #}
+              {# {% endif %} #}
+          {# </button> #}
+        {# </form> #}
+      {% endfor %}
+    </ul>
+    </div>
+  {% endif %}
+
+
+
+  {% if all_following %}
+    <div class=" col-sm-4 mx-auto">
+      <h1>I am Following:</h1>
+      <ul>
+          {% for following in all_following %}
+            <li><p>{{following}}</p></li>
+          {% endfor %}
+    </ul>
+    </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<div class="jumbotron">
+
+  {# message framework  #}
+  {% if messages %}
+      <div class="col-lg-3 color03">
+          <ul class="messages">
+              {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+      </div>
+  {% endif %}
+
+    {# POST DETAIL #}
+    <div class=" col-sm-4 col-lg-6  mx-auto img-thumbnail" >
+      <h2>{{post_detail.title}}</a></h2>
+      <img src="{{ post_detail.file.url }}" alt="sorry" style="width:100%;" class="img-fluid">
+      <br><br>
+      <p> <a href="{% url 'user_profile:profile_detail' post_detail.user.id  %}"><strong>{{ post_detail.user }}</strong></a> {{post_detail.description}} </p>
+      <p> created at : {{ post_detail.update_at|timesince }} ago</p>
+
+      {# "{% url 'post:like_toggle' post_detail.pk %}" is equivalent to "{{ post_detail.get_like_url }}" #}
+      <p><a href="{{ post_detail.get_like_url }}">{{post_detail.like.count}} Likes</a></p>
+      <br>
+    </div>
+</div>
+
+{% if user.is_authenticated %}
+    {# COMMENT FUCNTION IN POST DETAIL #}
+    <div class=" col-sm-4 col-lg-6 mx-auto" >
+      <h2><u>Comment</u></h2>
+
+      {# COMMENT FORM #}
+      <form class="" action="" method="post">
+          {% csrf_token %}
+          {{ comment_form|crispy }}
+          <input type="submit" name="" value="Post Comment" class="btn btn-default">
+      </form>
+
+      {# main comment #}
+      {% for comment in comments %}
+        <blockquote style="border-left:5px #dce3ef solid ;padding:0 0 0px 10px;"class="blockquote">
+          <p class="mb-0">{{ comment.content }}</p>
+            <footer class="blockquote-footer">{{comment.user}} | <cite title="Source Title">{{comment.timestamp|timesince}} ago</cite> |
+              {# https://www.youtube.com/watch?v=cLyd8Mx2qak&index=17&list=PLEsfXFp6DpzQB82YbmKKBy2jKdzpZKczn #}
+              {# for counting comment and showing reply using toggle button #}
+              {% if comment.children.count > 0 %}{{comment.children.count}} Comment{%if comment.children.count > 1 %}s {% endif %}| {% endif %} <a class="comment-reply-btn" href="#">Reply</a></footer>
+
+
+            <div class="comment-reply" style="display:none">
+             {# child comment #}
+            {% for child_comment in comment.children%}
+            <div class="" style="margin-left:30px;">
+              <blockquote style="border-left:5px #dce3ef solid;; padding-left:10px;" class="blockquote">
+                <p class="mb-0">{{ child_comment.content }}</p>
+                <footer class="blockquote-footer">{{ child_comment.user}} | <cite title="Source Title">{{ child_comment.timestamp|timesince}} ago</cite></footer>
+              </blockquote>
+              </div>
+            {% endfor %}
+
+              {# REPLY FORM #}
+              <form class="" action="" method="post">
+                {% csrf_token %}
+                {{ comment_form|crispy }}
+                {# to check who the parent id is   #}
+                <input type="hidden" name="parent_id" value= "{{ comment.id }}">
+                <input type="submit" name="" value="Reply" class="btn btn-default">
+              </form>
+          </div>
+        </blockquote>
+        <hr>
+      {% endfor %}
+    </div>
+{% endif %}
+
+
+
+
+{% endblock %}

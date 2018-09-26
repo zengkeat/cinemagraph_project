@@ -1,0 +1,13 @@
+{% extends 'base.html'%}
+{% load bootstrap3%}
+{% load crispy_forms_tags %}
+{% block content %}
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h1> Delete:</h1>
+    <p> Are you sure you want to delete "{{ object.title }}" ?</p>
+    <input type="submit" class="btn btn-success" name="" value="Yes">
+    <a style="float:right;" href="{% url 'user_profile:profile' %}" class="btn btn-success">No</a>
+  </form>
+{% endblock %}

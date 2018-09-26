@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+<div class="container">
+    <h1>Login</h1>
+    <form method="POST">
+        {% csrf_token %}
+
+        {# DEFAULT LoginView template tag is {{form}}  #}
+        {% bootstrap_form form %}
+        <input type="submit" value="Login" class="btn btn-default">
+    </form>
+</div>
+{% endblock %}

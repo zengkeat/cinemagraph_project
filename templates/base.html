@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+
+    <!-- {# javascript and CSS for bootstrap 4 #} -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <!-- semantic-ui framework -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
+
+    <!-- {# google fonts #} -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <!-- {# css file #} -->
+    <link rel="stylesheet" href="{% static 'cinemagraph_social_project/CSS/master.css'%}">
+
+    <!-- ballon ckeditor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/balloon/ckeditor.js"></script>
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+   </head>
+
+    <title>Cinemagraph </title>
+  </head>
+  <body>
+
+    <!-- {# navigationbar #} -->
+    <nav  class="navbar navbar-expand-lg navbar-light bg-light" id='navbar' >
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home'%}">Article</a>
+
+
+        <ul class="navbar-nav navbar-right">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'post:post_list' %}">Explore</a>
+          </li>
+
+          {% if user.is_authenticated %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'home-feed' %}">Home</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+            </li>
+          
+            <!-- profile dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{request.user.username}}</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{% url 'user_profile:profile' %}">My Profile</a>
+                  <a class="dropdown-item" href="{% url 'user_profile:edit' %}">Edit Profile</a>
+                  <a class="dropdown-item" href="{% url 'post:user_post' %}">Post</a>
+                  <a class="dropdown-item" href="{% url 'article:article_create' %}">Write Article</a>
+                </div>
+              </li>
+              <!-- ******* -->
+            {% else %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'accounts:login' %}">Log In</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'accounts:register' %}">Sign Up</a>
+            </li>
+            {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container ">
+
+      {% block content%}
+
+      {% endblock %}
+    </div>
+
+
+<script type="text/javascript">
+// {# for showing reply using toggle button #}
+// https://www.youtube.com/watch?v=cLyd8Mx2qak&index=17&list=PLEsfXFp6DpzQB82YbmKKBy2jKdzpZKczn
+$(".comment-reply-btn").click(function(event){
+       event.preventDefault();
+       $(this).parent().next(".comment-reply").fadeToggle();
+   })
+</script>
+
+
+  <!-- ckeditor ballon  -->
+  <script>
+      BalloonEditor
+          .create( document.querySelector( '#editor' ) )
+          .catch( error => {
+              console.error( error );
+          } );
+  </script>
+
+  </body>
+</html>

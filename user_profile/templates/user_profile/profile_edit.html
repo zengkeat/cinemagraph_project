@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+  <h1>User Profile Edit</h1>
+
+   {# ** enctype='multipart/form-data' is for the ImageField and FileField** #}
+  {# (cannot save the images or file if enctype is missing)  #}
+  <form  method="POST"  enctype='multipart/form-data'>
+    {% csrf_token %}
+    {% bootstrap_form form_edit %}
+    {% bootstrap_form form_extra %}
+    <input type="submit" class="btn btn-default" value="Confirm">
+
+  </form>
+</div>
+
+{% endblock %}

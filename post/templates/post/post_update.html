@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+{% load bootstrap3%}
+{% block content %}
+{% load crispy_forms_tags %}
+
+  {# TO SHOW WHEN THE POST FIRST CREATE #}
+  {% for create in post  %}
+  <h4> This post original created at: {{ create.created_at }}</h4>
+  <br>
+  {% endfor %}
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form_update|crispy }}
+
+    {# how to perform two button in single form  #}
+    {# https://stackoverflow.com/questions/866272/how-can-i-build-multiple-submit-buttons-django-form #}
+    <input class="btn btn-primary" type="submit" name="confirm_post" value="Confirm">
+    <input class='btn btn-danger' style="float:right;" type="submit" name="confirm_delete" value="Delete">
+  </form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html'%}
+
+{% block content%}
+
+  <div class="jumbotron">
+    <h1>Welcome to Cinemagraph !</h1>
+  </div>
+
+  {# search article #}
+  <div class="" style="float:right;">
+    <form class=""  method="get">
+      <input type="text" name="q" value="" placeholder="Search Article">
+      <input type="submit" name="" value="Search">
+    </form>
+  </div>
+
+
+  <h2>Check out our user article:</h2><br>
+  {% for article in article_list %}
+  <div class="row" style="float:left; width:100%; height:300px; border:1px solid black; margin-bottom:30px;" >
+    <img src="{{ article.file_url|default_if_none:'#' }}" alt="file missing" style=" width:25%; height:100%;">
+    <div class="" style="margin-left:5%;">
+    <h1><a href= "{% url 'article:article_detail' slug=article.slug %}" >{{article.title}}</a></h1>
+    <p>{{article.description}}</p>
+    <br><br><br>
+      {# to get the user id of the specific article: type "article.user.id" and #}
+     {# it will get the user id of this article and pass it to  #}
+     {# the 'user_profile':profile_detail' views and render it to show you the detailview. #}
+    <p> <strong><a href="{% url 'user_profile:profile_detail' article.user.id  %}">{{ article.user }}</a></strong> </p>
+    <p>{{article.updated|timesince}}</p>
+    </div>
+  </div>
+
+  {% endfor %}
+
+
+
+
+
+{% endblock %}

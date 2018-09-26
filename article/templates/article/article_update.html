@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% load bootstrap3%}
+{% load crispy_forms_tags %}
+{% block content %}
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {# for ckeditor #}
+    {{ form_update.media }}
+
+    <h2> Updated here:</h2>
+    {{ form_update|crispy }}
+    <input type="submit" name="" value="Confirm">
+    <a href="{% url 'article:article_delete' slug=object.slug %}" style="float:right;" class="btn btn-danger">Delete</a>
+  </form>
+  <br><br>
+{% endblock %}

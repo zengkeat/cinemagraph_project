@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+{% load bootstrap3%}
+{% block content %}
+
+<div class="jumbotron">
+
+  <h1>Welcome to the Cinemagraph !</h1>
+</div>
+
+{# search post #}
+<div class=" " style="margin-bottom:10px;">
+  <form class=""  method="get" style="text-align:right;">
+    <input type="text" name="q" value="" placeholder="Search Post">
+    <input type="submit" name="" value="Search">
+  </form>
+</div>
+
+
+  {% for post in post_list %}
+  <div class=" img-thumbnail" style="float:left; width:30%; height:300px; margin:0 0 20px 3%;">
+    <a href= "{{ post.get_absolute_url }}" ><img style="width:100%;height:100%;"src="{{ post.file.url }}" alt="sorry" class="img-fluid"></a>
+  </div>
+  {% endfor %}
+
+
+
+
+{% endblock %}

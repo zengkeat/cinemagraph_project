@@ -1,0 +1,13 @@
+{% extends 'base.html'%}
+{% load bootstrap3%}
+
+{% block content %}
+
+  <form  method="post">
+    <h1> Please Sign Up here: </h1>
+    {% csrf_token %}
+    {# # default template_name_suffix = '_form' from CreateView #}
+    {% bootstrap_form form %}
+    <input type="submit" class="btn btn-primary" value="Sign up">
+  </form>
+{% endblock%}

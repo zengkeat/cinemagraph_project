@@ -1,0 +1,91 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<h1>welcome to user profile page!</h1>
+
+<div class="jumbotron">
+  <ul>
+    <li><h3>Follower: {{user_follower_count.follower.count}} users</h3></li>
+    <li><h3>Following: {{user_following_count.is_following.count}} users</h3></li>
+    <li>Username: {{user.username}}</li>
+    <li>First Name: {{user.first_name}}</li>
+    <li>Last Name: {{user.last_name}}</li>
+    <li>Email Address: {{user.email}}</li>
+    {# because userextraprofile model is link with the user model pk, so type user.userextraprofile.something #}
+    {% if user.userextramodel.description%}
+    <li>Description: {{user.userextramodel.description}}</li>
+    {% endif %}
+
+    {% if user.userextramodel.city %}
+    <li>Location: {{user.userextramodel.city}}</li>
+    {% endif %}
+
+    {% if user.userextramodel.website %}
+    <li>Website: {{user.userextramodel.website}}</li>
+    {% endif %}
+
+    {% if user.userextramodel.contact %}
+    <li>Contact: {{user.userextramodel.contact}}</li>
+    {% endif %}
+
+
+    {# when displaying file or images in the html, add .url at behind to fetch the images url in the #}
+    {# database, but for this to work, adding +static in the project urls.py to connect them together #}
+    {# https://docs.djangoproject.com/en/1.8/howto/static-files/#serving-static-files-during-development #}
+    {% if user.userextramodel.image %}
+    <li>Profile Picture: <br> <img src="{{ user.userextramodel.image.url }}" alt=" sorry " height="250"width="240"></li>
+    {% endif %}
+  </ul>
+
+  {# following and follower check form/btn #}
+  <div class="" style="position:absolute;">
+    {# this form send the request.POST to the action=" url ", and the view will get the request wether  #}
+    {# is "follower" or "following" and process it. #}
+    <form class="" action="{% url 'user_profile:follower' %}" method="post">{% csrf_token %}
+    <input style="font-size:20px;" type="submit" class="btn-primary" name="follower" value="Follower">
+    <input style="font-size:20px;" type="submit" class="btn-success" name="following" value="Following">
+    </form>
+  </div>
+</div>
+    {# userprofile button #}
+    {# <a href="{% url 'user_profile:edit' %}"> <input type="submit" class="btn btn-primary" value="Edit"></a> #}
+    {# <a href="{% url 'post:user_post' %}" > <input type="submit"  class="btn btn-success btn-outline-success " value="AddPost"></a> #}
+
+    {# <div class="" style="float:right;" > #}
+      {# <a href="{% url 'article:article_create' %}" > <input type="submit"  class="btn btn-success btn-outline-success " value="Write Article"></a> #}
+    {# </div> #}
+    {# </div> #}
+  {# ******* #}
+
+    <h1> My Post:</h1>
+    {% for post in user_post_list %}
+      <div class="img-thumbnail" style="width:30%; height:450px; float:left; margin:0 0 20px 3%;">
+        <img src="{{ post.file.url }}" alt="sorry" class="img-fluid" style="width:100%;height:70%;">
+
+        {# link the title to the UpdateView and also get the pk for update the specific post #}
+        {# https://www.udemy.com/python-and-django-full-stack-web-developer-bootcamp/learn/v4/t/lecture/6735078?start=0 #}
+        <h4><a href= "{% url 'post:post_update' pk=post.pk %}" >{{post.title}}</a></h4>
+        <p> <strong>{{ post.user }}</strong> {{post.description|truncatechars:50}} </p>
+        <p> Publish at : {{ post.update_at|timesince }} ago</p>
+      </div>
+    {% endfor %}
+
+
+
+  <h1>My Article:</h1>
+  {% for article in user_post_article %}
+    <div class="row" style="float:left; width:100%; height:300px; border:1px solid black; margin-bottom:30px; " >
+      <img src="{{ article.file_url|default_if_none:'#' }}" alt="file missing" style=" width:25%; height:100%;">
+      <div class="" style="margin-left:5%;">
+        <h1><a href= "{% url 'article:article_update' slug=article.slug %}" >{{article.title}}</a></h1>
+        <p>{{article.description}}</p>
+        <br><br><br>
+        <p> <strong>{{ article.user }}</strong> </p>
+        <p>{{article.updated|timesince}}</p>
+      </div>
+    </div>
+  {% endfor %}
+
+
+{% endblock %}

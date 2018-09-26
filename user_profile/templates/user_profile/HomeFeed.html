@@ -1,0 +1,36 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<div class="jumbotron">
+ <h1>HomeFeed: The user that you follow </h1>
+</div>
+
+<h1> Home:</h1>
+{% for post in Post_feed %}
+  <div class="img-thumbnail" style="width:30%; height:450px; float:left; margin:0 0 20px 3%;">
+    <img src="{{ post.file.url }}" alt="sorry" class="img-fluid" style="width:100%;height:70%;">
+
+    {# link the title to the UpdateView and also get the pk for update the specific post #}
+    {# https://www.udemy.com/python-and-django-full-stack-web-developer-bootcamp/learn/v4/t/lecture/6735078?start=0 #}
+    <h4><a href="{% url 'post:post_detail' post.pk %}">{{post.title}}</a></h4>
+    <p> <strong><a href="{% url 'user_profile:profile_detail' post.user.id  %}">{{ post.user }}</a></strong> {{post.description|truncatechars:50}} </p>
+    <p> Publish at : {{ post.update_at|timesince }} ago</p>
+  </div>
+{% endfor %}
+
+<h1>My Article:</h1>
+{% for article in Article_feed %}
+  <div class="row" style="float:left; width:100%; height:300px; border:1px solid black; margin-bottom:30px; " >
+    <img src="{{ article.file_url|default_if_none:'#' }}" alt="file missing" style=" width:25%; height:100%;">
+    <div class="" style="margin-left:5%;">
+      <h1><a href="{% url 'article:article_detail' article.slug %}">{{article.title}}</a></h1>
+      <p>{{article.description}}</p>
+      <br><br><br>
+      <p> <strong><a href="{% url 'user_profile:profile_detail' article.user.id  %}">{{ article.user }}</a></strong> </p>
+      <p>{{article.updated|timesince}}</p>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<div class="jumbotron">
+  <ul>
+
+    {# if you use "get" to get the object in the database, no need to use iterable method  #}
+    {# like {% for ** in ** %}, just user the template tag name #}
+    <li>Username: {{user_info.username}}</li>
+    <li>First Name: {{user_info.first_name}}</li>
+    <li>Last Name: {{user_info.last_name}}</li>
+    <li>Email Address: {{user_info.email}}</li>
+    {# because userextraprofile model is link with the user model pk, so type user.userextraprofile.something #}
+    {% if user_info.userextramodel.description%}
+    <li>Description: {{user_info.userextramodel.description}}</li>
+    {% endif %}
+
+    {% if user_info.userextramodel.city %}
+    <li>Location: {{user_info.userextramodel.city}}</li>
+    {% endif %}
+
+    {% if user_info.userextramodel.website %}
+    <li>Website: {{user_info.userextramodel.website}}</li>
+    {% endif %}
+
+    {% if user_info.userextramodel.contact %}
+    <li>Contact: {{user_info.userextramodel.contact}}</li>
+    {% endif %}
+
+
+    {# when displaying file or images in the html, add .url at behind to fetch the images url in the #}
+    {# database, but for this to work, adding +static in the project urls.py to connect them together #}
+    {# https://docs.djangoproject.com/en/1.8/howto/static-files/#serving-static-files-during-development #}
+    {% if user_info.userextramodel.image %}
+    <li>Profile Picture: <br> <img src="{{ user_info.userextramodel.image.url }}" alt=" sorry " height="250"width="240"></li>
+    {% endif %}
+  </ul>
+
+  {% if user.is_authenticated %}
+  {# if user of this profile_detail page is not the user that login, only the follow button will be show, to prevent the user follow themself #}
+  {% if user_info.username != request_user %}
+  {# follow form/btn #}
+  {# # https://www.youtube.com/watch?v=yDv5FIAeyoY&t=23608s "Follow Button Form (6:53:30)" #}
+  <form class="" action="{% url 'follow' %}" method="post">{% csrf_token %}
+    <input type="hidden" name="username" value="{{user_info.username}}" >
+    <button class=" btn {% if is_following %}btn-primary{% else %}btn-success{% endif %}">
+        {% if is_following %}
+          Unfollow
+          {% else %}
+          Follow
+        {% endif %}
+    </button>
+  </form>
+{% endif %}
+{% endif %}
+
+
+</div>
+
+<h1> My Post:</h1>
+{% for post in user_info.postmodel.all %}
+  <div class="img-thumbnail" style="width:30%; height:450px; float:left; margin:0 0 20px 3%;">
+    <img src="{{ post.file.url }}" alt="sorry" class="img-fluid" style="width:100%;height:70%;">
+
+    {# link the title to the UpdateView and also get the pk for update the specific post #}
+    {# https://www.udemy.com/python-and-django-full-stack-web-developer-bootcamp/learn/v4/t/lecture/6735078?start=0 #}
+    <h4><a href="{% url 'post:post_detail' post.pk %}">{{post.title}}</a></h4>
+    <p> <strong>{{ post.user }}</strong> {{post.description|truncatechars:50}} </p>
+    <p> Publish at : {{ post.update_at|timesince }} ago</p>
+  </div>
+{% endfor %}
+
+<h1>My Article:</h1>
+{% for article in user_info.articlemodel.all %}
+  <div class="row" style="float:left; width:100%; height:300px; border:1px solid black; margin-bottom:30px; " >
+    <img src="{{ article.file_url|default_if_none:'#' }}" alt="file missing" style=" width:25%; height:100%;">
+    <div class="" style="margin-left:5%;">
+      <h1><a href="{% url 'article:article_detail' article.slug %}">{{article.title}}</a></h1>
+      <p>{{article.description}}</p>
+      <br><br><br>
+      <p> <strong>{{ article.user }}</strong> </p>
+      <p>{{article.updated|timesince}}</p>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}

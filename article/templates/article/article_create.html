@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% load bootstrap3%}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+  <form  method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {# # to create a ckeditor in the form  #}
+    {{ form_create.media }}
+
+    <h2> Choose a image for you article:</h2>
+    {{ form_create|crispy }}
+    <input type="submit" name="" value="Confirm">
+  </form>
+  <br><br>
+{% endblock %}
